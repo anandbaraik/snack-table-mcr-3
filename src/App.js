@@ -43,13 +43,15 @@ function App() {
     if(col === 'id') {
         sortedData = sortingOrder.id ? [...initialData]?.sort((a, b) => a?.id - b?.id) : [...initialData]?.sort((a, b) => b?.id - a?.id) ;
     } else if (col === 'product_name') {
-        sortedData = sortingOrder.product_name ? [...initialData]?.sort((a, b) => a.product_name.localeCompare(b.product_name)) : [...initialData]?.sort((a, b) => b.product_name.localeCompare(a.product_name));
+        sortedData = sortingOrder.product_name ? [...initialData]?.sort((a, b) => a.product_name.toLowerCase().localeCompare(b.product_name.toLowerCase())) : [...initialData]?.sort((a, b) => b.product_name.toLowerCase().localeCompare(a.product_name.toLowerCase()));
     } else if (col === 'product_weight') {
-        sortedData = sortingOrder.product_weight ? [...initialData]?.sort((a, b) => a?.product_weight - b?.product_weight) : [...initialData]?.sort((a, b) => b?.product_weight - a?.product_weight);
+        sortedData = sortingOrder.product_weight ? [...initialData]?.sort((a, b) => parseInt(a?.product_weight) - parseInt(b?.product_weight)) : [...initialData]?.sort((a, b) => parseInt(b?.product_weight) - parseInt(a?.product_weight));
     } else if (col === 'price') {
         sortedData = sortingOrder.price ? [...initialData]?.sort((a, b) => a?.price - b?.price) : [...initialData]?.sort((a, b) => b?.price - a?.price);
     } else if (col === 'calories') {
         sortedData = sortingOrder.calories ? [...initialData]?.sort((a, b) => a?.calories - b?.calories) : [...initialData]?.sort((a, b) => b?.calories - a?.calories);
+    } else if (col === 'ingredients') {
+        sortedData = sortingOrder.ingredients ? [...initialData]?.sort((a, b) => a?.ingredients[0].toLowerCase().localeCompare(b?.ingredients[0].toLowerCase())) : [...initialData]?.sort((a, b) => b?.ingredients[0].toLowerCase().localeCompare(a?.ingredients[0].toLowerCase()));
     }
     setTableData(sortedData);
   }
@@ -63,32 +65,34 @@ function App() {
           <th onClick={() => { sortBy('id')}}>
             ID
             {
-                sortingOrder.id ? ' ↑' : ' ↓'
+                sortingOrder.id ? ' ↓' : ' ↑'
             }
         </th>
           <th onClick={() => sortBy('product_name')}>
             Product Name
             {
-                sortingOrder.product_name ? ' ↑' : ' ↓'
+                sortingOrder.product_name ? ' ↓' : ' ↑'
             }
         </th>
           <th onClick={() => sortBy('product_weight')}>
             Product Weight {
-                sortingOrder.product_weight ? ' ↑' : ' ↓'
+                sortingOrder.product_weight ? ' ↓' : ' ↑'
             }
             </th>
           <th onClick={() => sortBy('price')}>
             Price (INR) {
-                sortingOrder.price ? ' ↑' : ' ↓'
+                sortingOrder.price ? ' ↓' : ' ↑'
             }
             </th>
           <th onClick={() => sortBy('calories')}>
             Calories {
-                sortingOrder.calories ? ' ↑' : ' ↓'
+                sortingOrder.calories ? ' ↓' : ' ↑'
             }
             </th>
-          <th>
-            Ingredients
+          <th onClick={() => sortBy('ingredients')}>
+            Ingredients {
+                sortingOrder.ingredients ? ' ↓' : ' ↑'
+            }
         </th>
         </tr>
         </thead>
@@ -99,7 +103,7 @@ function App() {
                 <tr key={snack.id}>
                     <td>{snack.id}</td>
                     <td>{snack.product_name}</td>
-                    <td>{snack.product_weight} {'g'}</td>
+                    <td>{snack.product_weight}</td>
                     <td>{snack.price}</td>
                     <td>{snack.calories}</td>
                     <td>{snack.ingredients.join(", ")}</td>
