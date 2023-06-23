@@ -1,41 +1,65 @@
-import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import React, { useState } from 'react';
 import { Logo } from './Logo';
-
+import "./index.css";
+import snacks from './data/tableData';
 function App() {
+  const [tableData, setTableData] = useState(snacks);
+  const [initialData, setInitialData] = useState(snacks);
+  const [search, setSearch] = useState("");
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearch(searchValue);
+    if(searchValue) {
+        const filterData = initialData?.filter(({product_name, ingredients}) => {
+            if(product_name.toLowerCase().includes(searchValue.toLowerCase())) {
+                return true;
+            }
+            return ingredients.some((ingredient) => ingredient.toLowerCase().includes(searchValue.toLowerCase()));
+        });
+        setTableData(filterData);
+    } else {
+        setTableData(initialData);
+    }
+  }
   return (
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
-    </ChakraProvider>
+    <div className='container'>
+      <h2>Snack Table</h2>
+      <input placeholder='search with products & ingredients' value={search} onChange={handleSearch}/>
+      <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product Name</th>
+          <th>Product Weight</th>
+          <th>Price (INR)</th>
+          <th>Calories</th>
+          <th>Ingredients</th>
+        </tr>
+        </thead>
+        <tbody>
+        {
+            (tableData?.length > 0) ? (
+                tableData?.map((snack) => (
+                <tr key={snack.id}>
+                    <td>{snack.id}</td>
+                    <td>{snack.product_name}</td>
+                    <td>{snack.product_weight}</td>
+                    <td>{snack.price}</td>
+                    <td>{snack.calories}</td>
+                    <td>{snack.ingredients.join(", ")}</td>
+                </tr>
+                ))
+            ) : (
+                <tr>
+                    <td colSpan={6}>
+                        Search products not found!
+                    </td>
+                </tr>
+            )
+        }
+        </tbody>
+      </table>
+    </div>
   );
 }
 
