@@ -7,7 +7,7 @@ function App() {
   const [initialData, setInitialData] = useState(snacks);
   const [search, setSearch] = useState("");
   const [sortingOrder, setSortingOrder] = useState({
-    id:false,
+    id:false, //true:ascending, false:descending
     product_name:false,
     product_weight:false,
     price:false,
@@ -112,7 +112,7 @@ function App() {
             ) : (
                 <tr>
                     <td colSpan={6}>
-                        Search products not found!
+                        Search data not found!
                     </td>
                 </tr>
             )
