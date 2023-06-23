@@ -7,7 +7,7 @@ function App() {
   const [initialData, setInitialData] = useState(snacks);
   const [search, setSearch] = useState("");
   const [sortingOrder, setSortingOrder] = useState({
-    id:true,
+    id:false,
     product_name:false,
     product_weight:false,
     price:false,
@@ -62,20 +62,32 @@ function App() {
         <tr>
           <th onClick={() => { sortBy('id')}}>
             ID
+            {
+                sortingOrder.id ? ' ↑' : ' ↓'
+            }
         </th>
           <th onClick={() => sortBy('product_name')}>
             Product Name
+            {
+                sortingOrder.product_name ? ' ↑' : ' ↓'
+            }
         </th>
           <th onClick={() => sortBy('product_weight')}>
-            Product Weight
+            Product Weight {
+                sortingOrder.product_weight ? ' ↑' : ' ↓'
+            }
             </th>
           <th onClick={() => sortBy('price')}>
-            Price (INR)
+            Price (INR) {
+                sortingOrder.price ? ' ↑' : ' ↓'
+            }
             </th>
           <th onClick={() => sortBy('calories')}>
-            Calories
+            Calories {
+                sortingOrder.calories ? ' ↑' : ' ↓'
+            }
             </th>
-          <th onClick={() => sortBy('ingredients')}>
+          <th>
             Ingredients
         </th>
         </tr>
